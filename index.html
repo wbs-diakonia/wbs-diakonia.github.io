@@ -1,272 +1,461 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Wspólnota Bożego Serca</title>
-<meta name="theme-color" content="#4a1220">
-<link rel="icon" type="image/jpeg" href="logo.jpg">
-<style>
-  :root {
-    --bg: #24080f;
-    --bg-grad-1: #4d1622;
-    --bg-grad-2: #170409;
-    --card: rgba(255,250,245,0.10);
-    --card-border: rgba(255,250,245,0.20);
-    --card-hover: rgba(255,250,245,0.20);
-    --text: #f8ede2;
-    --muted: #d8b9ae;
-    --accent: #f5ead9;
-    --accent-2: #e8b7a3;
-    --radius: 18px;
-  }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; padding: 0; }
-  body {
-    min-height: 100vh;
-    font-family: "Nunito", "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
-    background:
-      radial-gradient(1200px 600px at 50% -10%, var(--bg-grad-1), transparent),
-      linear-gradient(160deg, var(--bg-grad-2), var(--bg));
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 28px 16px 48px;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pieśni WBS</title>
+    <style>
+        * { box-sizing: border-box; }
 
-  header {
-    width: 100%;
-    max-width: 760px;
-    text-align: center;
-    margin-bottom: 28px;
-  }
-  .logo {
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.35), 0 0 0 3px rgba(248,237,226,0.25);
-  }
-  h1 {
-    font-size: clamp(26px, 6vw, 36px);
-    margin: 0 0 6px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-  }
-  header p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 14px;
-  }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            height: 100dvh; 
+            width: 100vw;
+            overflow: hidden;
+        }
 
-  main {
-    width: 100%;
-    max-width: 760px;
-  }
+        #ui-layer {
+            padding: 8px;
+            background: #1a1a1a;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            border-bottom: 1px solid #333;
+            z-index: 1000;
+            flex-shrink: 0;
+        }
 
-  .section-title {
-    font-size: 15px;
-    text-transform: uppercase;
-    letter-spacing: 1.4px;
-    color: var(--accent-2);
-    margin: 26px 4px 12px;
-    font-weight: 800;
-  }
-  .section-title:first-of-type { margin-top: 0; }
+        /* STYL WYSZUKIWARKI */
+        #song-search {
+            flex: 1 1 100%;
+            padding: 10px;
+            font-size: 16px;
+            background: #222;
+            color: #ffca28;
+            border: 1px solid #444;
+            border-radius: 4px;
+            margin-bottom: 2px;
+        }
 
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
+        #song-select {
+            flex: 1 1 100%;
+            padding: 8px;
+            font-size: 16px;
+            background: #333;
+            color: white;
+            border: 1px solid #444;
+            border-radius: 4px;
+        }
 
-  a.tile {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 16px 16px;
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    text-decoration: none;
-    color: var(--text);
-    backdrop-filter: blur(6px);
-    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-    min-height: 64px;
-  }
-  a.tile:active { transform: scale(0.97); }
+        .controls-row {
+            display: flex;
+            width: 100%;
+            gap: 6px;
+        }
 
-  .icon {
-    flex: 0 0 44px;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    background: rgba(255,255,255,0.08);
-  }
+        button {
+            padding: 8px 12px;
+            font-size: 14px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            flex: 1;
+        }
 
-  .tile-text { flex: 1; min-width: 0; }
-  .tile-title {
-    font-weight: 700;
-    font-size: 17px;
-    line-height: 1.28;
-  }
-  .tile-sub {
-    font-size: 12.5px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
+        .btn-toggle { background: #28a745; }
+        
+        #section-select {
+            flex: 0 1 110px;
+            background: #444;
+            color: #ffca28;
+            border: 1px solid #555;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 5px;
+        }
 
-  .chevron {
-    color: var(--muted);
-    font-size: 18px;
-    flex: 0 0 auto;
-  }
+        #display {
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            overflow: hidden;
+            background: black;
+        }
 
-  footer {
-    margin-top: 36px;
-    color: var(--muted);
-    font-size: 12px;
-    text-align: center;
-  }
-  footer a { color: var(--accent-2); }
+        #logo-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('logo.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 50vmin; 
+            z-index: 1;
+            opacity: 0.7; /* Subtelne logo w tle */
+        }
 
-  /* Hover only where a real pointer exists (desktop) */
-  @media (hover: hover) and (pointer: fine) {
-    a.tile:hover {
-      background: var(--card-hover);
-      border-color: rgba(232,183,163,0.55);
-      transform: translateY(-2px);
-    }
-  }
+        #lyrics-container {
+            width: 100%;
+            z-index: 2;
+            padding: 10px 20px;
+            box-sizing: border-box;
+        }
 
-  /* Tablet / desktop: tiles as a proper grid */
-  @media (min-width: 640px) {
-    .grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (min-width: 960px) {
-    .grid { grid-template-columns: repeat(3, 1fr); }
-    main, header { max-width: 980px; }
-  }
-</style>
+        /* Gdy nawet po zmniejszeniu czcionki tekst się nie mieści,
+           włączamy przewijanie i wyrównanie do góry ekranu. */
+        #display.scrollable {
+            align-items: flex-start;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .verse {
+            font-weight: 600;
+            line-height: 1.25;
+            white-space: pre-wrap;
+            animation: fadeIn 0.2s ease-out;
+            font-size: 3.8dvh; 
+            width: 100%;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+        }
+
+        #copyright {
+            position: fixed;
+            right: 8px;
+            bottom: 6px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+            user-select: none;
+            z-index: 3;
+        }
+
+        .hidden { visibility: hidden; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (min-width: 769px) {
+            #ui-layer { flex-wrap: nowrap; }
+            #song-search { flex: 1; margin-bottom: 0; }
+            #song-select { flex: 1; }
+            .controls-row { flex: 0 1 auto; width: auto; }
+            .verse { font-size: 7vh; line-height: 1.4; }
+        }
+    </style>
 </head>
 <body>
 
-<header>
-  <img class="logo" src="logo-circle.jpg" alt="Wspólnota Bożego Serca — logo">
-  <h1>Wspólnota Bożego Serca</h1>
-</header>
+<div id="ui-layer">
+    <input type="text" id="song-search" placeholder="Szukaj (tytuł lub fragment tekstu)..." oninput="filterSongs()" onkeydown="handleSearchKey(event)">
+    
+    <select id="song-select" onchange="loadSong()">
+        <option value="">Ładowanie listy...</option>
+    </select>
+    
+    <div class="controls-row">
+        <button id="btn-toggle" class="btn-toggle" onclick="toggleDisplay()">Ukryj</button>
+        <select id="section-select" onchange="jumpToSection(this.value)">
+            <option value="">---</option>
+        </select>
+    </div>
+</div>
 
-<main>
-  <div class="section-title">Diakonia</div>
-  <div class="grid">
-    <a class="tile" href="https://docs.google.com/spreadsheets/d/19tpWnaX2hqOJNYljxX63MSgxif1PDvlT9tiXBspOmrc/edit" target="_blank" rel="noopener">
-      <div class="icon">📅</div>
-      <div class="tile-text">
-        <div class="tile-title">Grafik</div>
-        <div class="tile-sub">Arkusz Google</div>
-      </div>
-      <div class="chevron">›</div>
-    </a>
-    <a class="tile" href="https://photos.app.goo.gl/aJsKreRzqhzSVKVm7" target="_blank" rel="noopener">
-      <div class="icon">📷</div>
-      <div class="tile-text">
-        <div class="tile-title">Zdjęcia</div>
-        <div class="tile-sub">Google Photos</div>
-      </div>
-      <div class="chevron">›</div>
-    </a>
-  </div>
+<div id="display" onclick="handleTap(event)">
+    <div id="logo-bg"></div> 
+    <div id="lyrics-container">
+        <div id="verse-text" class="verse"></div>
+    </div>
+</div>
 
-  <div class="section-title">Nagrania</div>
-  <div class="grid">
-    <a class="tile" href="https://drive.google.com/drive/folders/13qake2By6WT_RfSQCWdtRROGjGT1XWS5" target="_blank" rel="noopener">
-      <div class="icon">🎧</div>
-      <div class="tile-text">
-        <div class="tile-title">Pieśni 2025–</div>
-        <div class="tile-sub">Dysk Google</div>
-      </div>
-      <div class="chevron">›</div>
-    </a>
-    <a class="tile" href="https://drive.google.com/drive/folders/17mmt9kpPBLM9KZ6kJpLoy660LVDCGLNW" target="_blank" rel="noopener">
-      <div class="icon">🎧</div>
-      <div class="tile-text">
-        <div class="tile-title">Pieśni 2021–2025</div>
-        <div class="tile-sub">Dysk Google</div>
-      </div>
-      <div class="chevron">›</div>
-    </a>
-    <a class="tile" href="https://drive.google.com/drive/folders/1FYPcaHqMODncZn5PaH9oSzwQ1zUWlLmN" target="_blank" rel="noopener">
-      <div class="icon">🗄️</div>
-      <div class="tile-text">
-        <div class="tile-title">Pieśni 2021 (Mamre)</div>
-        <div class="tile-sub">Dysk Google</div>
-      </div>
-      <div class="chevron">›</div>
-    </a>
-    <a class="tile" href="https://drive.google.com/drive/folders/1SJVQ7RtwnhHI_V2b2s57lUyBOE0P91dY" target="_blank" rel="noopener">
-      <div class="icon">🙏</div>
-      <div class="tile-text">
-        <div class="tile-title">Psalmy</div>
-        <div class="tile-sub">Dysk Google</div>
-      </div>
-      <div class="chevron">›</div>
-    </a>
-  </div>
+<div id="copyright">©dominik</div>
 
-  <div class="section-title">Materiały</div>
-  <div class="grid">
-    <a class="tile" href="https://chwalapanu.pl" target="_blank" rel="noopener">
-      <div class="icon">🎵</div>
-      <div class="tile-text">
-        <div class="tile-title">Śpiewnik „ChwałaPanu”</div>
-        <div class="tile-sub">chwalapanu.pl</div>
-      </div>
-      <div class="chevron">›</div>
-    </a>
-    <a class="tile" href="https://wbs-diakonia.github.io/piesni/" target="_blank" rel="noopener">
-      <div class="icon">🎶</div>
-      <div class="tile-text">
-        <div class="tile-title">Śpiewnik „Pieśni WBS”</div>
-        <div class="tile-sub">wbs-diakonia.github.io/piesni</div>
-      </div>
-      <div class="chevron">›</div>
-    </a>
-    <a class="tile" href="https://drive.google.com/drive/folders/1O33U9UiGnxGjBOWeuWze4TuO_RH6vkR6" target="_blank" rel="noopener">
-      <div class="icon">📖</div>
-      <div class="tile-text">
-        <div class="tile-title">Nuty, teksty, śpiewniki</div>
-        <div class="tile-sub">Dysk Google</div>
-      </div>
-      <div class="chevron">›</div>
-    </a>
-    <a class="tile" href="https://drive.google.com/drive/folders/1QHd2Ro1_k2EM9asMC1usgq8G3H38Q4bM?usp=drive_link" target="_blank" rel="noopener">
-      <div class="icon">🎤</div>
-      <div class="tile-text">
-        <div class="tile-title">Trening wokalny — Cheryl Porter</div>
-        <div class="tile-sub">Dysk Google</div>
-      </div>
-      <div class="chevron">›</div>
-    </a>
-    <a class="tile" href="https://csmonline.edu.pl/" target="_blank" rel="noopener">
-      <div class="icon">🏫</div>
-      <div class="tile-text">
-        <div class="tile-title">CSM</div>
-        <div class="tile-sub">csmonline.edu.pl</div>
-      </div>
-      <div class="chevron">›</div>
-    </a>
-  </div>
-</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<script>
+    let db = null;
+    let allSongs = []; 
+    let versesList = []; 
+    let sectionLabelsList = []; 
+    let currentVerseIndex = 0;
+    let isHidden = false;
 
-<footer>
-  Do użytku wewnętrznego
-</footer>
+    const sectionMap = {
+        'v': 'Zwr',
+        'c': 'Ref',
+        'b': 'Bri',
+        'p': 'Pre',
+        'i': 'Int',
+        'e': 'Zak'
+    };
 
+    // --- INICJALIZACJA ---
+    async function init() {
+        try {
+            const SQL = await initSqlJs({
+                locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}`
+            });
+            const response = await fetch('songs.sqlite');
+            const buffer = await response.arrayBuffer();
+            db = new SQL.Database(new Uint8Array(buffer));
+
+            const result = db.exec("SELECT id, title, search_lyrics FROM songs ORDER BY title COLLATE NOCASE");
+            allSongs = (result[0] ? result[0].values : []).map(row => ({
+                id: row[0],
+                name: row[1],
+                searchName: normalizeText(row[1]),
+                searchLyrics: normalizeText(row[2])
+            }));
+
+            displaySongs(allSongs);
+        } catch (err) { console.error("Błąd ładowania bazy songs.sqlite:", err); }
+    }
+
+    // --- WYSZUKIWARKA ---
+    function displaySongs(songsToDisplay) {
+        const select = document.getElementById('song-select');
+        select.innerHTML = '<option value="">-- Wybierz pieśń (' + songsToDisplay.length + ') --</option>';
+        songsToDisplay.forEach(song => {
+            const option = document.createElement('option');
+            option.value = song.id;
+            option.textContent = song.name;
+            select.appendChild(option);
+        });
+    }
+
+    // Usuwa polskie (i inne) znaki diakrytyczne, np. "Święty" -> "swiety".
+    // "ł" nie rozkłada się przez NFD, więc zamieniamy go ręcznie.
+    function normalizeText(text) {
+        return (text || '')
+            .toLowerCase()
+            .replace(/ł/g, 'l')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function filterSongs() {
+        const query = normalizeText(document.getElementById('song-search').value).trim();
+        const filtered = query === ''
+            ? allSongs
+            : allSongs.filter(song => song.searchName.includes(query) || song.searchLyrics.includes(query));
+        displaySongs(filtered);
+    }
+
+    function handleSearchKey(e) {
+        if (e.key === 'Enter') {
+            const select = document.getElementById('song-select');
+            if (select.options.length > 1) {
+                select.selectedIndex = 1; // Wybiera pierwszą przefiltrowaną pieśń
+                loadSong();
+                document.getElementById('song-search').blur(); // Chowa klawiaturę
+            }
+        }
+    }
+
+    // --- ŁADOWANIE PIEŚNI ---
+    async function loadSong() {
+        const songId = document.getElementById('song-select').value;
+        if (!songId || !db) return;
+        try {
+            const stmt = db.prepare("SELECT lyrics, verse_order FROM songs WHERE id = :id");
+            stmt.bind({ ':id': songId });
+            if (!stmt.step()) { stmt.free(); return; }
+            const row = stmt.getAsObject();
+            stmt.free();
+
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(row.lyrics, "text/xml");
+
+            const xmlVerses = xmlDoc.getElementsByTagName("verse");
+            // Zachowujemy zwrotki w kolejności dokumentu (do trybu bez verse_order)
+            // oraz w słowniku klucz->tekst (do trybu z verse_order, gdzie ten sam
+            // klucz np. "c1" może być celowo wielokrotnie odwoływany dla refrenu).
+            const orderedVerses = [];
+            const availableSections = {};
+            for (let v of xmlVerses) {
+                const key = (v.getAttribute("type") + v.getAttribute("label")).toLowerCase();
+                const text = (v.textContent || "").trim();
+                orderedVerses.push({ key, text });
+                availableSections[key] = text;
+            }
+
+            versesList = [];
+            sectionLabelsList = [];
+            if (row.verse_order && row.verse_order.trim() !== "") {
+                // OpenLP jawnie określił kolejność i powtórzenia (np. refrenów) po kluczu.
+                const orderArray = row.verse_order.toLowerCase().split(/\s+/).filter(s => s !== "");
+                orderArray.forEach(name => {
+                    if (availableSections[name]) {
+                        versesList.push(availableSections[name]);
+                        sectionLabelsList.push(translateSectionName(name));
+                    }
+                });
+            } else {
+                // Brak verse_order: pokazujemy zwrotki dokładnie w kolejności z XML,
+                // bez odwoływania się do słownika (niektóre pieśni mają zduplikowane
+                // klucze type+label o różnej treści, co powodowało gubienie zwrotek).
+                orderedVerses.forEach(({ key, text }) => {
+                    if (text) {
+                        versesList.push(text);
+                        sectionLabelsList.push(translateSectionName(key));
+                    }
+                });
+            }
+
+            updateSectionDropdown();
+            currentVerseIndex = 0;
+            isHidden = false;
+            updateUI();
+            renderVerse();
+        } catch (err) { 
+            console.error(err);
+            alert("Błąd przetwarzania pieśni."); 
+        }
+    }
+
+    function translateSectionName(name) {
+        if (!name) return "???";
+        const match = name.match(/^([a-z]+)(\d*)([a-z]?)$/i);
+        if (!match) return name;
+        const prefix = match[1].toLowerCase();
+        const num = match[2];
+        const suffix = match[3];
+        let label = sectionMap[prefix] || prefix.toUpperCase();
+        let result = label;
+        if (num) result += " " + num;
+        if (suffix) result += suffix;
+        return result;
+    }
+
+    // --- INTERFEJS I NAWIGACJA ---
+    function updateSectionDropdown() {
+        const sel = document.getElementById('section-select');
+        sel.innerHTML = '';
+        sectionLabelsList.forEach((label, index) => {
+            const opt = document.createElement('option');
+            opt.value = index;
+            opt.textContent = label;
+            sel.appendChild(opt);
+        });
+    }
+
+    function jumpToSection(index) {
+        currentVerseIndex = parseInt(index);
+        isHidden = false;
+        updateUI();
+        renderVerse();
+    }
+
+    function toggleDisplay() {
+        isHidden = !isHidden;
+        updateUI();
+    }
+
+    function updateUI() {
+        const btn = document.getElementById('btn-toggle');
+        const text = document.getElementById('verse-text');
+        if (isHidden) {
+            text.classList.add('hidden');
+            btn.textContent = "Pokaż";
+            btn.style.background = "#6c757d";
+        } else {
+            text.classList.remove('hidden');
+            btn.textContent = "Ukryj";
+            btn.style.background = "#28a745";
+        }
+    }
+
+    function renderVerse() {
+        const container = document.getElementById('verse-text');
+        const secSelect = document.getElementById('section-select');
+        if (versesList.length > 0) {
+            container.innerText = versesList[currentVerseIndex];
+            secSelect.value = currentVerseIndex;
+            fitVerseText();
+        }
+    }
+
+    // --- DOPASOWANIE ROZMIARU CZCIONKI DO EKRANU ---
+    // Zwraca bazowy rozmiar czcionki (w px) zgodny z regułami CSS dla .verse
+    // (3.8dvh na telefonie, 7vh od 769px szerokości).
+    function getBaseFontSizePx() {
+        const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        const percent = isDesktop ? 7 : 3.8;
+        return vh * percent / 100;
+    }
+
+    // Zmniejsza czcionkę tekstu zwrotki, jeśli nie mieści się na ekranie.
+    // Jeśli nawet minimalny rozmiar nie wystarczy, włącza przewijanie.
+    function fitVerseText() {
+        const displayEl = document.getElementById('display');
+        const containerEl = document.getElementById('lyrics-container');
+        const textEl = document.getElementById('verse-text');
+
+        const baseSize = getBaseFontSizePx();
+        const minSize = baseSize * 0.4; // nie schodzimy poniżej 40% bazowego rozmiaru
+        let size = baseSize;
+
+        displayEl.classList.remove('scrollable');
+        textEl.style.fontSize = size + 'px';
+
+        while (containerEl.scrollHeight > displayEl.clientHeight && size > minSize) {
+            size -= 1;
+            textEl.style.fontSize = size + 'px';
+        }
+
+        if (containerEl.scrollHeight > displayEl.clientHeight) {
+            displayEl.classList.add('scrollable');
+        }
+    }
+
+    let resizeTimeout = null;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(fitVerseText, 150);
+    });
+    window.addEventListener('orientationchange', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(fitVerseText, 150);
+    });
+
+    function handleTap(e) {
+        if (versesList.length === 0) return;
+        const width = window.innerWidth;
+        if (e.clientX < width / 2) prevVerse();
+        else nextVerse();
+    }
+
+    function nextVerse() {
+        if (versesList.length === 0) return;
+        currentVerseIndex = (currentVerseIndex + 1) % versesList.length;
+        renderVerse();
+    }
+
+    function prevVerse() {
+        if (versesList.length === 0) return;
+        currentVerseIndex = (currentVerseIndex - 1 + versesList.length) % versesList.length;
+        renderVerse();
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.target.id === 'song-search') return; // Nie reaguj na strzałki podczas pisania
+        if (e.code === 'Space' || e.code === 'ArrowRight') nextVerse();
+        else if (e.code === 'ArrowLeft') prevVerse();
+        else if (e.code === 'KeyH' || e.code === 'Escape') toggleDisplay();
+    });
+
+    init();
+</script>
 </body>
 </html>
