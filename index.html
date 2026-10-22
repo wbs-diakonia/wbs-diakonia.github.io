@@ -136,6 +136,17 @@
   }
   footer a { color: var(--accent-2); }
 
+  #copyright {
+    position: fixed;
+    right: calc(8px + env(safe-area-inset-right));
+    bottom: calc(6px + env(safe-area-inset-bottom));
+    font-size: 11px;
+    color: rgba(248, 237, 226, 0.3);
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+  }
+
   /* Hover only where a real pointer exists (desktop) */
   @media (hover: hover) and (pointer: fine) {
     a.tile:hover {
@@ -267,6 +278,8 @@
 <footer>
   Do użytku wewnętrznego
 </footer>
+
+<div id="copyright">©dominik</div>
 
 </body>
 </html>
